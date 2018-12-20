@@ -20,7 +20,7 @@ gem 'backport'
 
 ## Usage
 
-This example demonstrates a simple echo server.
+A simple echo server:
 
 ```ruby
 require 'backport'
@@ -40,8 +40,17 @@ module MyAdapter
 end
 
 Backport.run do
-  Backport.start_tcp_server(adapter: MyAdapter)
-  Backport.start_interval 1 do
+  Backport.prepare_tcp_server(host: 'localhost', port: 8000, adapter: MyAdapter)
+end
+```
+
+An interval server that runs once per second:
+
+```ruby
+require 'backport'
+
+Backport.run do
+  Backport.prepare_interval 1 do
     puts "tick"
   end
 end

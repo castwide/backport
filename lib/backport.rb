@@ -8,28 +8,57 @@ module Backport
   autoload :Client,  'backport/client'
 
   class << self
-    def start_stdio_server adapter: Adapter
-      machine.start_server Backport::Server::Stdio.new(adapter: adapter)
+    # Prepare a STDIO server to run in Backport.
+    #
+    # @param adapter [Adapter]
+    # @return [void]
+    def prepare_stdio_server adapter: Adapter
+      machine.prepare Backport::Server::Stdio.new(adapter: adapter)
     end
 
-    def start_tcp_server host: 'localhost', port: 1117, adapter: Adapter
-      machine.start_server Backport::Server::Tcpip.new(host: host, port: port, adapter: adapter)
+    # Prepare a TCP server to run in Backport.
+    #
+    # @param host [String]
+    # @param port [Integer]
+    # @param adapter [Adapter]
+    # @return [void]
+    def prepare_tcp_server host: 'localhost', port: 1117, adapter: Adapter
+      machine.prepare Backport::Server::Tcpip.new(host: host, port: port, adapter: adapter)
     end
 
-    def start_interval period, &block
-      machine.start_server Backport::Server::Interval.new(period, &block)
+    # Prepare an interval server to run in Backport.
+    #
+    # @param period [Float] Seconds between intervals
+    # @return [void]
+    def prepare_interval period, &block
+      machine.prepare Backport::Server::Interval.new(period, &block)
     end
 
+    # Run the Backport machine. The provided block will be executed before the
+    # machine starts. Program execution is halted until the machine stops.
+    #
+    # @example Print "tick" once per second
+    #   Backport.run do
+    #     Backport.prepare_interval 1 do
+    #       puts "tick"
+    #     end
+    #   end
+    #
+    # @return [void]
     def run &block
       machine.run &block
     end
 
+    # Stop the Backport machine.
+    #
+    # @return [void]
     def stop
       machine.stop
     end
 
     private
 
+    # @return [Machine]
     def machine
       @machine ||= Machine.new
     end

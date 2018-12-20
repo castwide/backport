@@ -38,7 +38,7 @@ module Backport
     #
     # @param server [Server::Base]
     # @return [void]
-    def start_server server
+    def prepare server
       servers.push server
       server.start unless stopped?
     end
