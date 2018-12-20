@@ -59,12 +59,12 @@ module Backport
       Thread.new do
         until stopped?
           @in.flush
-          char = @in.getbyte
-          if char.nil?
+          chars = @in.sysread(255)
+          if chars.nil?
             stop
             break
           end
-          mutex.synchronize { @buffer.concat char }
+          mutex.synchronize { @buffer.concat chars }
         end
       end
     end

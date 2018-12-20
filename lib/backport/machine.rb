@@ -53,10 +53,8 @@ module Backport
     def run_server_thread
       servers.map(&:start)
       until stopped?
-        servers.each do |server|
-          server.tick
-          sleep 0.001
-        end
+        servers.each(&:tick)
+        sleep 0.001
       end
     end
   end
