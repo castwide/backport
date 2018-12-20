@@ -1,5 +1,4 @@
 require_relative '../fixtures/input_adapter'
-# require 'stringio'
 
 RSpec.describe Backport::Server::Stdio do
   it "reads input on ticks" do
