@@ -6,7 +6,7 @@ module Backport
       def initialize input: STDIN, output: STDOUT, adapter: Adapter
         @in = input
         @out = output
-        @in.binmode
+        @out.binmode
         @adapter = adapter
         clients.push Client.new(input, output, adapter)
       end

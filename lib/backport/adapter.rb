@@ -4,24 +4,44 @@ module Backport
       @out = output
     end
 
-    def opening
-      STDERR.puts "Opening"
-    end
+    # A callback triggered when a client connection is opening. Subclasses
+    # and/or modules should override this method to provide their own
+    # functionality.
+    #
+    # @return [void]
+    def opening; end
 
-    def closing
-      STDERR.puts "Closing"
-    end
+    # A callback triggered when a client connection is closing. Subclasses
+    # and/or modules should override this method to provide their own
+    # functionality.
+    #
+    # @return [void]
+    def closing; end
 
-    def sending data
-      STDERR.puts "Client sent #{data}"
-    end
+    # A callback triggered when the client is sending data to the server.
+    # Subclasses and/or modules should override this method to provide their
+    # own functionality.
+    #
+    # @param data [String]
+    # @return [void]
+    def sending(data); end
 
+    # Send data to the client.
+    #
+    # @param data [String]
+    # @return [void]
     def write data
-      @out.print data
+      @out.write data
+      @out.flush
     end
 
+    # Send a line of data to the client.
+    #
+    # @param data [String]
+    # @return [void]
     def write_line data
       @out.puts data
+      @out.flush
     end
   end
 end

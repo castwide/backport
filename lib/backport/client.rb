@@ -3,7 +3,6 @@ module Backport
     def initialize input, output, adapter
       @in = input
       @out = output
-      # @todo Adapter can either be an Adapter class or a module
       @adapter = make_adapter(adapter)
       @stopped = true
       @buffer = ''
@@ -59,9 +58,9 @@ module Backport
     def run_input_thread
       Thread.new do
         until stopped?
-          char = @in.getc
+          @in.flush
+          char = @in.getbyte
           if char.nil?
-            STDERR.puts "Client received nil. Stopping"
             stop
             break
           end
