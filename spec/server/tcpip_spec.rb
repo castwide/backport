@@ -6,11 +6,13 @@ RSpec.describe Backport::Server::Tcpip do
     input = double(IO, sysread: 'sent', flush: nil)
     server = Backport::Server::Tcpip.new(host: 'localhost', port: 99999, adapter: InputAdapter)
     server.start
-    TCPSocket.open('localhost', 99999) do |s|
-      s.send "sent", 0
-    end
+    client = TCPSocket.new('localhost', 99999)
+    client.send "sent", 0
+    sleep 0.1
     server.tick
+    client.close
     server.stop
+    sleep 0.1
     expect(InputAdapter.received).to include('sent')
   end
 end
