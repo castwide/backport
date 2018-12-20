@@ -8,7 +8,7 @@ module Backport
         end
       end
 
-      def start
+      def starting
         clients.map(&:run)
       end
 

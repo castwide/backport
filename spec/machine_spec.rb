@@ -8,4 +8,14 @@ RSpec.describe Backport::Machine do
     end
     expect(var).to eq(1)
   end
+
+  it "prepares servers" do
+    machine = Backport::Machine.new
+    server = Backport::Server::Base.new
+    machine.run do
+      machine.prepare server
+      expect(server).to be_started
+      machine.stop
+    end
+  end
 end

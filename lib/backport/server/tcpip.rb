@@ -8,10 +8,7 @@ module Backport
       def initialize host: 'localhost', port: 1117, adapter: Adapter
         @socket = TCPServer.new(host, port)
         @adapter = adapter
-      end
-
-      def stopped?
-        @stopped ||= false
+        @stopped = false
       end
 
       def tick
@@ -23,9 +20,17 @@ module Backport
         end
       end
 
-      def start
-        super
+      def starting
         start_accept_thread
+      end
+
+      def stopping
+        @super
+        @stopped = true
+      end
+
+      def stopped?
+        @stopped
       end
 
       private
@@ -44,6 +49,7 @@ module Backport
               clients.push Client.new(conn, conn, @adapter)
               clients.last.run
             end
+            sleep 0.001
           end
         end
       end

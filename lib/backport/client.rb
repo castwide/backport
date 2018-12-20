@@ -41,9 +41,9 @@ module Backport
     private
 
     def make_adapter cls_mod
-      if cls_mod.is_a?(Class)
+      if cls_mod.is_a?(Class) && cls_mod <= Backport::Adapter
         @adapter = cls_mod.new(@out)
-      elsif cls_mod.is_a?(Module)
+      elsif cls_mod.class == Module
         @adapter = Adapter.new(@out)
         @adapter.extend cls_mod
       else
@@ -59,7 +59,11 @@ module Backport
       Thread.new do
         until stopped?
           @in.flush
-          chars = @in.sysread(255)
+          begin
+            chars = @in.sysread(255)
+          rescue EOFError
+            chars = nil
+          end
           if chars.nil?
             stop
             break

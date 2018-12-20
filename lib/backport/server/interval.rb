@@ -12,10 +12,6 @@ module Backport
         @block.call
         @last_time = Time.now
       end
-
-      def stop
-        @stopped = true
-      end
     end
   end
 end
