@@ -34,7 +34,7 @@ module Backport
         begin
           socket.shutdown
         rescue Errno::ENOTCONN, IOError
-          # ignore
+          Backport.logger.info "Minor exception while stopping server [#{e.class}] #{e.message}"
         end
         socket.close
       end
@@ -68,8 +68,12 @@ module Backport
                 clients.push Client.new(conn, conn, @adapter, data)
                 clients.last.run
               end
+            rescue Errno::ENOTSOCK => e
+              Backport.logger.info "Server stopped with minor exception [#{e.class}] #{e.message}"
+              stop
+              break
             rescue Exception => e
-              STDERR.puts "Server stopped with exception [#{e.class}] #{e.message}"
+              Backport.logger.warn "Server stopped with major exception [#{e.class}] #{e.message}"
               stop
               break
             end

@@ -1,5 +1,5 @@
 require "backport/version"
-require 'socket'
+require 'logger'
 
 # An event-driven IO library.
 #
@@ -56,6 +56,10 @@ module Backport
     # @return [void]
     def stop
       machine.stop
+    end
+
+    def logger
+      @logger ||= Logger.new(STDERR, level: Logger::WARN)
     end
 
     private
