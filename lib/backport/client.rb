@@ -3,10 +3,10 @@ module Backport
     # @return [Adapter]
     attr_reader :adapter
 
-    def initialize input, output, adapter
+    def initialize input, output, adapter, remote = {}
       @in = input
       @out = output
-      @adapter = make_adapter(adapter)
+      @adapter = make_adapter(adapter, remote)
       @stopped = true
       @buffer = ''
     end
@@ -43,11 +43,11 @@ module Backport
 
     private
 
-    def make_adapter cls_mod
+    def make_adapter cls_mod, remote
       if cls_mod.is_a?(Class) && cls_mod <= Backport::Adapter
-        @adapter = cls_mod.new(@out)
+        @adapter = cls_mod.new(@out, remote)
       elsif cls_mod.class == Module
-        @adapter = Adapter.new(@out)
+        @adapter = Adapter.new(@out, remote)
         @adapter.extend cls_mod
       else
         raise TypeError, "#{cls_mod} is not a valid Backport adapter"

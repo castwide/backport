@@ -53,10 +53,16 @@ module Backport
             begin
               conn = socket.accept
               mutex.synchronize do
-                clients.push Client.new(conn, conn, @adapter)
+                addr = conn.addr(true)
+                data = {
+                  family: addr[0],
+                  port: addr[1],
+                  hostname: addr[2],
+                  address: addr[3]
+                }
+                clients.push Client.new(conn, conn, @adapter, data)
                 clients.last.run
               end
-              sleep 0.001
             rescue Exception => e
               STDERR.puts "Server stopped with exception [#{e.class}] #{e.message}"
               stop
