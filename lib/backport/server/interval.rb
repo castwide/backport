@@ -8,9 +8,10 @@ module Backport
       end
 
       def tick
-        return unless Time.now - @last_time > @period
+        now = Time.now
+        return unless now - @last_time > @period
         @block.call
-        @last_time = Time.now
+        @last_time = now
       end
     end
   end
