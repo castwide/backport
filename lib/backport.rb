@@ -1,6 +1,8 @@
 require "backport/version"
 require 'socket'
 
+# An event-driven IO library.
+#
 module Backport
   autoload :Adapter, 'backport/adapter'
   autoload :Machine, 'backport/machine'

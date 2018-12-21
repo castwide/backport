@@ -6,6 +6,8 @@ module Backport
         @started
       end
 
+      # Stop the server.
+      #
       def stop
         stopping
         @started = false

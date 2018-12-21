@@ -1,5 +1,7 @@
 module Backport
   module Server
+    # A mixin for Backport servers that communicate with clients.
+    #
     module Connectable
       def tick
         clients.each do |client|

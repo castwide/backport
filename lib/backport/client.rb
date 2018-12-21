@@ -15,12 +15,21 @@ module Backport
       @stopped ||= false
     end
 
+    # Close the client connect.
+    #
+    # @note The client sets #stopped? to true and runs the adapter's #closing
+    # callback. The server is responsible for implementation details like
+    # closing the client's socket.
+    #
     def stop
       return if stopped?
       @adapter.closing
       @stopped = true
     end
 
+    # Start running the client. This method will start the thread that reads
+    # client input from IO.
+    #
     def run
       return unless stopped?
       @stopped = false
@@ -28,10 +37,16 @@ module Backport
       run_input_thread
     end
 
+    # Notify the adapter that the client is sending data.
+    #
+    # @param data [String]
     def sending data
       @adapter.sending data
     end
 
+    # Read the client input. Return nil if the input buffer is empty.
+    #
+    # @return [String, nil]
     def read
       tmp = nil
       mutex.synchronize do

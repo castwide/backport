@@ -1,4 +1,6 @@
 module Backport
+  # The application interface between Backport servers and clients.
+  #
   class Adapter
     # A hash of information about the client connection. The data can vary
     # based on the transport, e.g., :hostname and :address for TCP connections
@@ -28,9 +30,9 @@ module Backport
     # @return [void]
     def closing; end
 
-    # A callback triggered when the client is sending data to the server.
-    # Subclasses and/or modules should override this method to provide their
-    # own functionality.
+    # A callback triggered when the client sends data to the server. Subclasses
+    # and/or modules should override this method to provide their own
+    # functionality.
     #
     # @param data [String]
     # @return [void]
@@ -58,6 +60,12 @@ module Backport
       @closed ||= false
     end
 
+    # Close the client connection.
+    #
+    # @note The adapter sets #closed? to true and runs the #closing callback.
+    #   The server is responsible for implementation details like closing the
+    #   client's socket.
+    #
     def close
       return if closed?
       @closed = true
