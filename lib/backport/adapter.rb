@@ -43,5 +43,15 @@ module Backport
       @out.puts data
       @out.flush
     end
+
+    def closed?
+      @closed ||= false
+    end
+
+    def close
+      return if closed?
+      @closed = true
+      closing
+    end
   end
 end

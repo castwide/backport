@@ -14,9 +14,14 @@ module Backport
       def tick
         mutex.synchronize do
           clients.each do |client|
+            if client.adapter.closed?
+              client.stop
+              next
+            end
             input = client.read
             client.sending input unless input.nil?
           end
+          clients.delete_if(&:stopped?)
         end
       end
 
@@ -25,8 +30,8 @@ module Backport
       end
 
       def stopping
-        @super
-        @stopped = true
+        super
+        socket.close unless socket.closed?
       end
 
       def stopped?
@@ -35,6 +40,7 @@ module Backport
 
       private
 
+      # @return [TCPSocket]
       attr_reader :socket
 
       def mutex
@@ -44,12 +50,18 @@ module Backport
       def start_accept_thread
         Thread.new do
           until stopped?
-            conn = socket.accept
-            mutex.synchronize do
-              clients.push Client.new(conn, conn, @adapter)
-              clients.last.run
+            begin
+              conn = socket.accept
+              mutex.synchronize do
+                clients.push Client.new(conn, conn, @adapter)
+                clients.last.run
+              end
+              sleep 0.001
+            rescue Exception => e
+              STDERR.puts "Server stopped with exception [#{e.class}] #{e.message}"
+              stop
+              break
             end
-            sleep 0.001
           end
         end
       end

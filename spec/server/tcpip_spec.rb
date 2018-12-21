@@ -1,9 +1,9 @@
 require_relative '../fixtures/input_adapter'
+require_relative '../fixtures/close_adapter'
 require 'socket'
 
 RSpec.describe Backport::Server::Tcpip do
   it "reads input on ticks" do
-    input = double(IO, sysread: 'sent', flush: nil)
     server = Backport::Server::Tcpip.new(host: '127.0.0.1', port: 9999, adapter: InputAdapter)
     server.start
     client = TCPSocket.new('127.0.0.1', 9999)
@@ -14,5 +14,28 @@ RSpec.describe Backport::Server::Tcpip do
     server.stop
     sleep 0.1
     expect(InputAdapter.received).to include('sent')
+  end
+
+  it "closes connections" do
+    server = Backport::Server::Tcpip.new(host: '127.0.0.1', port: 9999)
+    server.start
+    client = TCPSocket.new('127.0.0.1', 9999)
+    sleep 0.1
+    server.tick
+    expect(server.clients.length).to eq(1)
+    client.close
+    sleep 0.1
+    server.tick
+    expect(server.clients.length).to eq(0)
+    server.stop
+  end
+
+  it "closes clients with closed adapters" do
+    server = Backport::Server::Tcpip.new(host: '127.0.0.1', port: 9999, adapter: CloseAdapter)
+    server.start
+    client = TCPSocket.new('127.0.0.1', 9999)
+    sleep 0.1
+    server.tick
+    expect(server.clients.length).to be_zero
   end
 end

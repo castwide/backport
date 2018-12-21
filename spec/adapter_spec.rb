@@ -16,4 +16,10 @@ RSpec.describe Backport::Adapter do
     expect(output.string).to include('sent')
     expect(output.string.lines.length).to eq(2)
   end
+
+  it "closes" do
+    adapter = Backport::Adapter.new(nil)
+    adapter.close
+    expect(adapter).to be_closed
+  end
 end

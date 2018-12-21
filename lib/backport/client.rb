@@ -1,5 +1,8 @@
 module Backport
   class Client
+    # @return [Adapter]
+    attr_reader :adapter
+
     def initialize input, output, adapter
       @in = input
       @out = output

@@ -16,8 +16,6 @@ module Backport
         clients.map(&:stop)
       end
 
-      protected
-
       def clients
         @clients ||= []
       end
