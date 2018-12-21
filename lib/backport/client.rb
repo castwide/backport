@@ -64,7 +64,7 @@ module Backport
           @in.flush
           begin
             chars = @in.sysread(255)
-          rescue EOFError
+          rescue EOFError, Errno::ECONNRESET
             chars = nil
           end
           if chars.nil?

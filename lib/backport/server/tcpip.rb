@@ -31,7 +31,12 @@ module Backport
 
       def stopping
         super
-        socket.close unless socket.closed?
+        begin
+          socket.shutdown
+        rescue Errno::ENOTCONN, IOError
+          # ignore
+        end
+        socket.close
       end
 
       def stopped?

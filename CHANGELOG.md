@@ -6,6 +6,7 @@
 - More accurate interval time
 - Adapter#remote attribute
 - Adapter#close method
+- Socket exception handling
 
 ## 0.1.0 - December 20, 2018
 First release
