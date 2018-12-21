@@ -1,7 +1,17 @@
 module Backport
   class Adapter
-    def initialize output
+    # A hash of information about the client connection. The data can vary
+    # based on the transport, e.g., :hostname and :address for TCP connections
+    # or :filename for file streams.
+    #
+    # @return [Hash{Symbol => String, Integer}]
+    attr_reader :remote
+
+    # @param output [IO]
+    # @param remote [Hash{Symbol => String, Integer}]
+    def initialize output, remote = {}
       @out = output
+      @remote = remote
     end
 
     # A callback triggered when a client connection is opening. Subclasses
