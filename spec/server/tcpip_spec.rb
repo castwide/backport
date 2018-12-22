@@ -38,4 +38,17 @@ RSpec.describe Backport::Server::Tcpip do
     server.tick
     expect(server.clients.length).to be_zero
   end
+
+  it "stops on major exceptions" do
+    # A "major" exception is any exception that does not occur as an expected
+    # result of an operation on a closed socket. Trying to accept a connection
+    # on a closed socket, for example, can be expected to result in an
+    # Errno::ENOTSOCK exception. Unexpected exceptions still close the socket
+    # but emit a warning.
+    socket = double(:socket, close: nil, shutdown: nil)
+    allow(socket).to receive(:new).and_return(socket)
+    allow(socket).to receive(:accept_nonblock).and_raise(RuntimeError)
+    server = Backport::Server::Tcpip.new(socket_class: socket)
+    expect { server.accept }.not_to raise_error
+  end
 end
