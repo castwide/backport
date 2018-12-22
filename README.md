@@ -20,6 +20,8 @@ gem 'backport'
 
 ## Usage
 
+### Examples
+
 A simple echo server:
 
 ```ruby
@@ -27,11 +29,11 @@ require 'backport'
 
 module MyAdapter
   def opening
-    write "Opening the connection"
+    puts "Opening a connection"
   end
 
   def closing
-    write "Closing the connection"
+    puts "Closing a connection"
   end
 
   def sending data
@@ -55,3 +57,24 @@ Backport.run do
   end
 end
 ```
+
+### Using Adapters
+
+Backport servers that handle client connections, such as TCP servers, use an
+adapter to provide an application interface to the client. Developers can
+provide their own adapter implementations in two ways: a Ruby module that will
+be used to extend a Backport::Adapter object, or a class that extends
+Backport::Adapter. In either case, the adapter should provide the following
+methods:
+
+* `opening`: A callback triggered when the client connection is accepted
+* `closing`: A callback triggered when the client connection is closed
+* `sending(data)`: A callback triggered when the server receives data from the client
+
+Backport::Adapter also provides the following methods:
+
+* `write(data)`: Send raw data to the client
+* `write_line(data)`: Send a line of data to the client
+* `close`: Disconnect the client from the server
+* `closed?`: True if the connection is closed
+* `remote`: A hash of data about the client, e.g., the remote IP address
