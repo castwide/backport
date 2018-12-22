@@ -13,7 +13,7 @@ module Backport
 
       def tick
         now = Time.now
-        return unless now - @last_time > @period
+        return unless now - @last_time >= @period
         @block.call
         @last_time = now
       end

@@ -2,6 +2,9 @@ require 'socket'
 
 module Backport
   module Server
+    # A Backport TCP server. It runs a thread to accept incoming connections
+    # and automatically stops when the socket is closed.
+    #
     class Tcpip < Base
       include Connectable
 
@@ -31,7 +34,6 @@ module Backport
 
       def stopping
         super
-        @stopped = true
         begin
           socket.shutdown
         rescue Errno::ENOTCONN, IOError => e
@@ -40,17 +42,12 @@ module Backport
         socket.close
       end
 
-      def stopped?
-        @stopped
-      end
-
       # Accept an incoming connection using accept_nonblock. Return the
       # resulting Client if a connection was accepted or nil if no connections
       # are pending.
       #
       # @return [Client, nil]
       def accept
-        return if stopped?
         result = nil
         mutex.synchronize do
           begin

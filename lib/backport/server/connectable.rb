@@ -2,6 +2,8 @@ module Backport
   module Server
     # A mixin for Backport servers that communicate with clients.
     #
+    # Connectable servers check clients for incoming data on each tick.
+    #
     module Connectable
       def tick
         clients.each do |client|
@@ -18,6 +20,7 @@ module Backport
         clients.map(&:stop)
       end
 
+      # @retrun [Array<Client>]
       def clients
         @clients ||= []
       end

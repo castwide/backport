@@ -1,4 +1,6 @@
 module Backport
+  # A client connected to a connectable Backport server.
+  #
   class Client
     # @return [Adapter]
     attr_reader :adapter
@@ -15,7 +17,7 @@ module Backport
       @stopped ||= false
     end
 
-    # Close the client connect.
+    # Close the client connection.
     #
     # @note The client sets #stopped? to true and runs the adapter's #closing
     # callback. The server is responsible for implementation details like

@@ -1,5 +1,7 @@
 module Backport
   module Server
+    # A Backport STDIO server.
+    #
     class Stdio < Base
       include Connectable
 

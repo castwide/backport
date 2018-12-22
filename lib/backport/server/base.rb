@@ -1,16 +1,32 @@
 module Backport
   module Server
+    # An extendable server class that provides basic start/stop functionality
+    # and common callbacks.
+    #
     class Base
-      def started?
-        @started ||= false
-        @started
+      # Start the server.
+      #
+      def start
+        return if started?
+        starting
+        @started = true
       end
 
       # Stop the server.
       #
       def stop
+        return if stopped?
         stopping
         @started = false
+      end
+
+      def started?
+        @started ||= false
+        @started
+      end
+
+      def stopped?
+        !started?
       end
 
       # A callback triggered when a Machine starts running or the server is
@@ -32,11 +48,6 @@ module Backport
       #
       # @return [void]
       def tick; end
-
-      def start
-        starting
-        @started = true
-      end
     end
   end
 end
