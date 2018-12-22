@@ -62,7 +62,7 @@ module Backport
             clients.push Client.new(conn, conn, @adapter, data)
             clients.last.run
             result = clients.last
-          rescue IO::EWOULDBLOCKWaitReadable => e
+          rescue IO::WaitReadable => e
             # ignore
           rescue Errno::ENOTSOCK, IOError => e
             Backport.logger.info "Server stopped with minor exception [#{e.class}] #{e.message}"
