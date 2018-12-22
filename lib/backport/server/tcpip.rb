@@ -33,7 +33,7 @@ module Backport
         super
         begin
           socket.shutdown
-        rescue Errno::ENOTCONN, IOError
+        rescue Errno::ENOTCONN, IOError => e
           Backport.logger.info "Minor exception while stopping server [#{e.class}] #{e.message}"
         end
         socket.close
