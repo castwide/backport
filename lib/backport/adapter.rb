@@ -2,18 +2,28 @@ module Backport
   # The application interface between Backport servers and clients.
   #
   class Adapter
+    # @param output [IO]
+    # @param remote [Hash{Symbol => String, Integer}]
+    def initialize output, remote = {}
+      # Store internal data in a singleton method to avoid instance variable
+      # collisions in custom adapters
+      data = {
+        out: output,
+        remote: remote,
+        closed: false
+      }
+      define_singleton_method :_data do
+        data
+      end
+    end
+
     # A hash of information about the client connection. The data can vary
     # based on the transport, e.g., :hostname and :address for TCP connections
     # or :filename for file streams.
     #
     # @return [Hash{Symbol => String, Integer}]
-    attr_reader :remote
-
-    # @param output [IO]
-    # @param remote [Hash{Symbol => String, Integer}]
-    def initialize output, remote = {}
-      @out = output
-      @remote = remote
+    def remote
+      _data[:remote]
     end
 
     # A callback triggered when a client connection is opening. Subclasses
@@ -43,8 +53,8 @@ module Backport
     # @param data [String]
     # @return [void]
     def write data
-      @out.write data
-      @out.flush
+      _data[:out].write data
+      _data[:out].flush
     end
 
     # Send a line of data to the client.
@@ -52,12 +62,12 @@ module Backport
     # @param data [String]
     # @return [void]
     def write_line data
-      @out.puts data
-      @out.flush
+      _data[:out].puts data
+      _data[:out].flush
     end
 
     def closed?
-      @closed ||= false
+      _data[:closed] ||= false
     end
 
     # Close the client connection.
@@ -68,7 +78,7 @@ module Backport
     #
     def close
       return if closed?
-      @closed = true
+      _data[:closed] = true
       closing
     end
   end
