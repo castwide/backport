@@ -5,7 +5,7 @@ module Backport
     end
 
     # Run the machine. If a block is provided, it gets executed before the
-    # maching starts its main loop. The main loop halts program execution
+    # maching starts its main loop. The main loop blocks program execution
     # until the machine is stopped.
     #
     # @return [void]

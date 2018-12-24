@@ -37,7 +37,7 @@ module Backport
     end
 
     # Run the Backport machine. The provided block will be executed before the
-    # machine starts. Program execution is halted until the machine stops.
+    # machine starts. Program execution is blocked until the machine stops.
     #
     # @example Print "tick" once per second
     #   Backport.run do
