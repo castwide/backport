@@ -59,7 +59,7 @@ module Backport
     end
 
     def logger
-      @logger ||= Logger.new(STDERR, level: Logger::WARN)
+      @logger ||= Logger.new(STDERR, level: Logger::WARN, progname: 'Backport')
     end
 
     private
