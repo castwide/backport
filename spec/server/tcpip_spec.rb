@@ -51,4 +51,13 @@ RSpec.describe Backport::Server::Tcpip do
     server = Backport::Server::Tcpip.new(socket_class: socket)
     expect { server.accept }.not_to raise_error
   end
+
+  it "stops when the socket is closed" do
+    server = Backport::Server::Tcpip.new(host: 'localhost', port: 9999)
+    server.start
+    expect(server.stopped?).to be(false)
+    server.send(:socket).close
+    sleep 0.1
+    expect(server.stopped?).to be(true)
+  end
 end
