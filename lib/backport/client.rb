@@ -32,12 +32,14 @@ module Backport
     # Start running the client. This method will start the thread that reads
     # client input from IO.
     #
-    def run
+    def start
       return unless stopped?
       @stopped = false
       @adapter.opening
       run_input_thread
     end
+    # @deprecated Prefer #start to #run for non-blocking client/server methods
+    alias run start
 
     # Notify the adapter that the client is sending data.
     #
