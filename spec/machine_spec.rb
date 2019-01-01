@@ -19,7 +19,7 @@ RSpec.describe Backport::Machine do
     end
   end
 
-  it "runs the server the server thread" do
+  it "runs the server thread" do
     machine = Backport::Machine.new
     done = false
     server = Backport::Server::Interval.new(0.1) do
@@ -30,5 +30,13 @@ RSpec.describe Backport::Machine do
       machine.prepare server
     end
     expect(done).to eq(true)
+  end
+
+  it "deletes stopped servers" do
+    machine = Backport::Machine.new
+    machine.prepare Backport::Server::Base.new
+    expect(machine.servers.length).to eq(1)
+    machine.tick
+    expect(machine.servers.length).to eq(0)
   end
 end

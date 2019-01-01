@@ -45,17 +45,23 @@ module Backport
       server.start unless stopped?
     end
 
-    private
-
     # @return [Array<Server::Base>]
     def servers
       @servers ||= []
     end
 
+    def tick
+      servers.delete_if(&:stopped?)
+      stop if servers.empty?
+      servers.each(&:tick)
+    end
+
+    private
+
     def run_server_thread
       servers.map(&:start)
       until stopped?
-        servers.each(&:tick)
+        tick
         sleep 0.001
       end
     end

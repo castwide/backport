@@ -8,4 +8,15 @@ RSpec.describe Backport::Server::Interval do
     server.tick
     expect(var).to eq(1)
   end
+
+  it "stops itself" do
+    server = Backport::Server::Interval.new(0.01) do |server|
+      server.stop
+    end
+    server.start
+    expect(server.started?).to be(true)
+    sleep 0.1
+    server.tick
+    expect(server.stopped?).to be(true)
+  end
 end
