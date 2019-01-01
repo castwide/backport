@@ -34,8 +34,9 @@ module Backport
 
       def stopping
         super
+        return if socket.closed?
         begin
-          socket.shutdown
+          socket.shutdown Socket::SHUT_RDWR
         rescue Errno::ENOTCONN, IOError => e
           Backport.logger.info "Minor exception while stopping server [#{e.class}] #{e.message}"
         end
@@ -90,6 +91,7 @@ module Backport
             client = accept
             Backport.logger.info "Client connected: #{client.adapter.remote}" unless client.nil?
             sleep 0.01
+            stop if socket.closed?
           end
         end
       end
