@@ -16,6 +16,13 @@ RSpec.describe Backport::Server::Tcpip do
     expect(InputAdapter.received).to include('sent')
   end
 
+  it "closes sockets" do
+    server = Backport::Server::Tcpip.new(host: 'localhost', port: 9999)
+    server.start
+    server.stop
+    expect(server.send(:socket)).to be_closed
+  end
+
   it "closes connections" do
     server = Backport::Server::Tcpip.new(host: '127.0.0.1', port: 9999)
     server.start
