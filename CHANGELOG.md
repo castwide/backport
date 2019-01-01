@@ -2,6 +2,7 @@
 - Basic logging
 - Differentiate between "expected" and "unexpected" exceptions in Tcpip
 - Prefer #start to #run for non-blocking client/server methods
+- Interval servers can stop themselves
 
 ## 0.2.0 - December 21, 2018
 - Minor bug fixes in STDIO server

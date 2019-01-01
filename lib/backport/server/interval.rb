@@ -4,17 +4,22 @@ module Backport
     #
     class Interval < Base
       # @param period [Float] The interval time in seconds.
-      # @param &block The proc to run on each interval.
+      # @param block [Proc] The proc to run on each interval.
+      # @yieldparam [Interval]
       def initialize period, &block
         @period = period
         @block = block
         @last_time = Time.now
       end
 
+      def starting
+        @last_time = Time.now
+      end
+
       def tick
         now = Time.now
         return unless now - @last_time >= @period
-        @block.call
+        @block.call self
         @last_time = now
       end
     end
