@@ -44,6 +44,7 @@ RSpec.describe Backport::Server::Tcpip do
     sleep 0.1
     server.tick
     expect(server.clients.length).to be_zero
+    server.stop
   end
 
   it "stops on major exceptions" do
