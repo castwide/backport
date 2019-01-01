@@ -1,4 +1,6 @@
 module Backport
+  # The Backport server controller.
+  #
   class Machine
     def initialize
       @stopped = true

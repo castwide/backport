@@ -22,7 +22,6 @@ module Backport
 
       def started?
         @started ||= false
-        @started
       end
 
       def stopped?

@@ -20,7 +20,7 @@ module Backport
         clients.map(&:stop)
       end
 
-      # @retrun [Array<Client>]
+      # @return [Array<Client>]
       def clients
         @clients ||= []
       end

@@ -1,4 +1,6 @@
 module Backport
+  # Classes and modules for Backport servers.
+  #
   module Server
     autoload :Base,        'backport/server/base'
     autoload :Connectable, 'backport/server/connectable'
