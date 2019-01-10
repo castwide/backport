@@ -1,4 +1,4 @@
-## 0.3.0
+## 0.3.0 - January 10, 2019
 - Basic logging
 - Differentiate between "expected" and "unexpected" exceptions in Tcpip
 - Prefer #start to #run for non-blocking client/server methods
