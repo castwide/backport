@@ -79,19 +79,21 @@ module Backport
 
     def run_input_thread
       Thread.new do
-        until stopped?
-          @in.flush
-          begin
-            chars = @in.sysread(255)
-          rescue EOFError, Errno::ECONNRESET
-            chars = nil
-          end
-          if chars.nil?
-            stop
-            break
-          end
-          mutex.synchronize { @buffer.concat chars }
-        end
+        tick until stopped?
+      end
+    end
+
+    def tick
+      @in.flush
+      begin
+        chars = @in.sysread(255)
+      rescue EOFError, Errno::ECONNRESET
+        chars = nil
+      end
+      if chars.nil?
+        stop
+      else
+        mutex.synchronize { @buffer.concat chars }
       end
     end
   end

@@ -1,4 +1,4 @@
-require "backport/version"
+require 'backport/version'
 require 'logger'
 
 # An event-driven IO library.
