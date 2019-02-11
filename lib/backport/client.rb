@@ -45,7 +45,7 @@ module Backport
     #
     # @param data [String]
     def sending data
-      @adapter.sending data
+      @adapter.receiving data
     end
 
     # Read the client input. Return nil if the input buffer is empty.

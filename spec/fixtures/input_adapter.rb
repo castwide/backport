@@ -5,7 +5,7 @@ module InputAdapter
     @@received
   end
 
-  def sending data
+  def receiving data
     @@received.concat data
   end
 end

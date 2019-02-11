@@ -40,13 +40,13 @@ module Backport
     # @return [void]
     def closing; end
 
-    # A callback triggered when the client sends data to the server. Subclasses
-    # and/or modules should override this method to provide their own
-    # functionality.
+    # A callback triggered when the server receives data from the client.
+    # Subclasses and/or modules should override this method to provide their
+    # own functionality.
     #
     # @param data [String]
     # @return [void]
-    def sending(data); end
+    def receiving(data); end
 
     # Send data to the client.
     #

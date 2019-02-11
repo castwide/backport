@@ -36,7 +36,7 @@ module MyAdapter
     puts "Closing a connection"
   end
 
-  def sending data
+  def receiving data
     write "Client sent: #{data}"
   end
 end
@@ -69,7 +69,7 @@ methods:
 
 * `opening`: A callback triggered when the client connection is accepted
 * `closing`: A callback triggered when the client connection is closed
-* `sending(data)`: A callback triggered when the server receives data from the client
+* `receiving(data)`: A callback triggered when the server receives data from the client
 
 Backport::Adapter also provides the following methods:
 
