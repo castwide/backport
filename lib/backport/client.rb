@@ -41,13 +41,6 @@ module Backport
     # @deprecated Prefer #start to #run for non-blocking client/server methods
     alias run start
 
-    # Notify the adapter that the client is sending data.
-    #
-    # @param data [String]
-    def sending data
-      @adapter.receiving data
-    end
-
     # Read the client input. Return nil if the input buffer is empty.
     #
     # @return [String, nil]
@@ -58,6 +51,15 @@ module Backport
         @buffer.clear
       end
       return tmp unless tmp.empty?
+    end
+
+    def tick
+      if adapter.closed?
+        stop
+      else
+        input = read
+        @adapter.receiving input unless input.nil?
+      end
     end
 
     private
@@ -79,11 +81,11 @@ module Backport
 
     def run_input_thread
       Thread.new do
-        tick until stopped?
+        read_input until stopped?
       end
     end
 
-    def tick
+    def read_input
       @in.flush
       begin
         chars = @in.sysread(255)

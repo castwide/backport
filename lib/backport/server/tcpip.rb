@@ -14,20 +14,6 @@ module Backport
         @stopped = false
       end
 
-      def tick
-        mutex.synchronize do
-          clients.each do |client|
-            if client.adapter.closed?
-              client.stop
-              next
-            end
-            input = client.read
-            client.sending input unless input.nil?
-          end
-          clients.delete_if(&:stopped?)
-        end
-      end
-
       def starting
         start_accept_thread
       end
@@ -80,10 +66,6 @@ module Backport
 
       # @return [TCPSocket]
       attr_reader :socket
-
-      def mutex
-        @mutex ||= Mutex.new
-      end
 
       def start_accept_thread
         Thread.new do

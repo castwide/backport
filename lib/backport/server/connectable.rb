@@ -6,9 +6,9 @@ module Backport
     #
     module Connectable
       def tick
-        clients.each do |client|
-          input = client.read
-          client.sending input unless input.nil?
+        mutex.synchronize do
+          clients.each(&:tick)
+          clients.delete_if(&:stopped?)
         end
       end
 
@@ -23,6 +23,12 @@ module Backport
       # @return [Array<Client>]
       def clients
         @clients ||= []
+      end
+
+      private
+
+      def mutex
+        @mutex ||= Mutex.new
       end
     end
   end
