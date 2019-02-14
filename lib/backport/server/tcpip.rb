@@ -23,8 +23,8 @@ module Backport
         return if socket.closed?
         begin
           socket.shutdown Socket::SHUT_RDWR
-        rescue Errno::ENOTCONN, IOError => e
-          Backport.logger.info "Minor exception while stopping server [#{e.class}] #{e.message}"
+        rescue Errno::ENOTCONN, IOError => err
+          Backport.logger.info "Minor exception while stopping server [#{err.class}] #{err.message}"
         end
         socket.close
       end
