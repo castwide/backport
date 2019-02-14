@@ -5,6 +5,10 @@ module Backport
     # @return [Adapter]
     attr_reader :adapter
 
+    # @param input [IO]
+    # @param output [IO]
+    # @param adapter [Class, Module]
+    # @param remote [Hash]
     def initialize input, output, adapter, remote = {}
       @in = input
       @out = output
@@ -13,6 +17,8 @@ module Backport
       @buffer = ''
     end
 
+    # True if the client is stopped.
+    #
     def stopped?
       @stopped ||= false
     end
@@ -41,6 +47,22 @@ module Backport
     # @deprecated Prefer #start to #run for non-blocking client/server methods
     alias run start
 
+    # Handle a tick from the server. This method will check for client input
+    # and update the adapter accordingly, or stop the client if the adapter is
+    # closed.
+    #
+    # @return [void]
+    def tick
+      if adapter.closed?
+        stop
+      else
+        input = read
+        @adapter.receiving input unless input.nil?
+      end
+    end
+
+    private
+
     # Read the client input. Return nil if the input buffer is empty.
     #
     # @return [String, nil]
@@ -53,17 +75,7 @@ module Backport
       return tmp unless tmp.empty?
     end
 
-    def tick
-      if adapter.closed?
-        stop
-      else
-        input = read
-        @adapter.receiving input unless input.nil?
-      end
-    end
-
-    private
-
+    # @return [Adapter]
     def make_adapter cls_mod, remote
       if cls_mod.is_a?(Class) && cls_mod <= Backport::Adapter
         @adapter = cls_mod.new(@out, remote)
@@ -75,16 +87,23 @@ module Backport
       end
     end
 
+    # @return [Mutex]
     def mutex
       @mutex ||= Mutex.new
     end
 
+    # Start the thread that checks the input IO for client data.
+    #
+    # @return [void]
     def run_input_thread
       Thread.new do
         read_input until stopped?
       end
     end
 
+    # Read input from the client.
+    #
+    # @return [void]
     def read_input
       @in.flush
       begin

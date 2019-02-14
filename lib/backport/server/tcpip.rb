@@ -49,13 +49,13 @@ module Backport
             clients.push Client.new(conn, conn, @adapter, data)
             clients.last.run
             result = clients.last
-          rescue IO::WaitReadable, Errno::EAGAIN => e
+          rescue IO::WaitReadable, Errno::EAGAIN
             # ignore
-          rescue Errno::ENOTSOCK, IOError => e
-            Backport.logger.info "Server stopped with minor exception [#{e.class}] #{e.message}"
+          rescue Errno::ENOTSOCK, IOError => err
+            Backport.logger.info "Server stopped with minor exception [#{err.class}] #{err.message}"
             stop
-          rescue Exception => e
-            Backport.logger.warn "Server stopped with major exception [#{e.class}] #{e.message}"
+          rescue Exception => err
+            Backport.logger.warn "Server stopped with major exception [#{err.class}] #{err.message}"
             stop
           end
         end

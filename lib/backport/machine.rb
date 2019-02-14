@@ -50,6 +50,9 @@ module Backport
       @servers ||= []
     end
 
+    # Update the machine's servers.
+    #
+    # @return [void]
     def tick
       servers.delete_if(&:stopped?)
       stop if servers.empty?
@@ -58,6 +61,9 @@ module Backport
 
     private
 
+    # Start the thread that updates servers via the #tick method.
+    #
+    # @return [void]
     def run_server_thread
       servers.map(&:start)
       until stopped?
