@@ -1,4 +1,4 @@
-## 1.0.0
+## 1.0.0 - February 19, 2019
 - Renamed Adapter#sending to Adapter#receiving
 
 ## 0.3.0 - January 10, 2019
