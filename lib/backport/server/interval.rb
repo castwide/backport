@@ -9,18 +9,31 @@ module Backport
       def initialize period, &block
         @period = period
         @block = block
-        @last_time = Time.now
+        @ready = false
+        @mutex = Mutex.new
       end
 
       def starting
-        @last_time = Time.now
+        @ready = false
+        run_ready_thread
       end
 
       def tick
-        now = Time.now
-        return unless now - @last_time >= @period
-        @block.call self
-        @last_time = now
+        return unless @ready
+        @mutex.synchronize do
+          @block.call self
+          @ready = false
+        end
+      end
+
+      private
+
+      def run_ready_thread
+        Thread.new do
+          break if stopped?
+          sleep @period
+          @mutex.synchronize { @ready = true }
+        end
       end
     end
   end

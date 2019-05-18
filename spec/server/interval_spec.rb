@@ -4,8 +4,10 @@ RSpec.describe Backport::Server::Interval do
     server = Backport::Server::Interval.new(0.01) do
       var += 1
     end
+    server.start
     sleep 0.1
     server.tick
+    server.stop
     expect(var).to eq(1)
   end
 
