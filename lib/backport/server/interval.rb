@@ -30,9 +30,11 @@ module Backport
 
       def run_ready_thread
         Thread.new do
-          break if stopped?
-          sleep @period
-          @mutex.synchronize { @ready = true }
+          until stopped?
+            sleep @period
+            break if stopped?
+            @mutex.synchronize { @ready = true }
+          end
         end
       end
     end

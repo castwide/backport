@@ -19,4 +19,15 @@ RSpec.describe Backport::Server::Interval do
     server.tick
     expect(server.stopped?).to be(true)
   end
+
+  it 'repeats' do
+    counter = 0
+    Backport.run do
+      Backport.prepare_interval 0.1 do
+        Backport.stop if counter == 4
+        counter += 1
+      end
+    end
+    expect(counter).to eq(5)
+  end
 end
