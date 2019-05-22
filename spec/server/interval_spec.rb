@@ -1,5 +1,5 @@
 RSpec.describe Backport::Server::Interval do
-  it "yields it block on ticks" do
+  it 'yields its block on ticks' do
     var = 0
     server = Backport::Server::Interval.new(0.01) do
       var += 1
@@ -11,7 +11,7 @@ RSpec.describe Backport::Server::Interval do
     expect(var).to eq(1)
   end
 
-  it "stops itself" do
+  it 'stops itself' do
     server = Backport::Server::Interval.new(0.01, &:stop)
     server.start
     expect(server.started?).to be(true)
