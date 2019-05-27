@@ -42,7 +42,6 @@ RSpec.describe Backport::Server::Tcpip do
     server.start
     client = TCPSocket.new('127.0.0.1', 9999)
     sleep 0.1
-    server.tick
     expect(server.clients.length).to be_zero
     server.stop
   end
@@ -55,7 +54,7 @@ RSpec.describe Backport::Server::Tcpip do
     # but emit a warning.
     socket = double(:socket, close: nil, shutdown: nil)
     allow(socket).to receive(:new).and_return(socket)
-    allow(socket).to receive(:accept_nonblock).and_raise(RuntimeError)
+    allow(socket).to receive(:accept).and_raise(RuntimeError)
     server = Backport::Server::Tcpip.new(socket_class: socket)
     expect { server.accept }.not_to raise_error
   end

@@ -5,12 +5,12 @@ module Backport
     # Connectable servers check clients for incoming data on each tick.
     #
     module Connectable
-      def tick
-        mutex.synchronize do
-          clients.each(&:tick)
-          clients.delete_if(&:stopped?)
-        end
-      end
+      # def tick
+      #   mutex.synchronize do
+      #     # clients.each(&:tick)
+      #     clients.delete_if(&:stopped?)
+      #   end
+      # end
 
       def starting
         clients.map(&:run)

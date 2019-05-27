@@ -1,7 +1,11 @@
+require 'observer'
+
 module Backport
   # A client connected to a connectable Backport server.
   #
   class Client
+    include Observable
+
     # @return [Adapter]
     attr_reader :adapter
 
@@ -33,6 +37,8 @@ module Backport
       return if stopped?
       @adapter.closing
       @stopped = true
+      changed
+      notify_observers self
     end
 
     # Start running the client. This method will start the thread that reads
@@ -105,16 +111,18 @@ module Backport
     #
     # @return [void]
     def read_input
-      @in.flush
       begin
+        @in.flush
         chars = @in.sysread(255)
-      rescue EOFError, Errno::ECONNRESET
+      rescue EOFError, IOError, Errno::ECONNRESET
         chars = nil
       end
       if chars.nil?
         stop
       else
         mutex.synchronize { @buffer.concat chars }
+        changed
+        notify_observers self
       end
     end
   end

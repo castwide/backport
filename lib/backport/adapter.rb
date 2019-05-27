@@ -70,6 +70,10 @@ module Backport
       _data[:closed] ||= false
     end
 
+    def on_close &block
+      _data[:on_close] = block
+    end
+
     # Close the client connection.
     #
     # @note The adapter sets #closed? to true and runs the #closing callback.
@@ -79,6 +83,7 @@ module Backport
     def close
       return if closed?
       _data[:closed] = true
+      _data[:on_close].call unless _data[:on_close].nil?
       closing
     end
   end

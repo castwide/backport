@@ -1,9 +1,13 @@
+require 'observer'
+
 module Backport
   module Server
     # An extendable server class that provides basic start/stop functionality
     # and common callbacks.
     #
     class Base
+      include Observable
+
       # Start the server.
       #
       def start
@@ -18,6 +22,8 @@ module Backport
         return if stopped?
         stopping
         @started = false
+        changed
+        notify_observers self
       end
 
       def started?

@@ -36,7 +36,7 @@ RSpec.describe Backport::Machine do
     machine = Backport::Machine.new
     machine.prepare Backport::Server::Base.new
     expect(machine.servers.length).to eq(1)
-    machine.tick
+    machine.update machine.servers.first
     expect(machine.servers.length).to eq(0)
   end
 end

@@ -10,7 +10,6 @@ module Backport
         @period = period
         @block = block
         @ready = false
-        @mutex = Mutex.new
       end
 
       def starting
@@ -20,10 +19,8 @@ module Backport
 
       def tick
         return unless @ready
-        @mutex.synchronize do
-          @block.call self
-          @ready = false
-        end
+        @block.call self
+        @ready = false
       end
 
       private
@@ -33,7 +30,9 @@ module Backport
           until stopped?
             sleep @period
             break if stopped?
-            @mutex.synchronize { @ready = true }
+            @ready = true
+            changed
+            notify_observers self
           end
         end
       end

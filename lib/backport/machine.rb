@@ -41,6 +41,7 @@ module Backport
     # @param server [Server::Base]
     # @return [void]
     def prepare server
+      server.add_observer self
       servers.push server
       server.start unless stopped?
     end
@@ -50,26 +51,28 @@ module Backport
       @servers ||= []
     end
 
-    # Update the machine's servers.
-    #
-    # @return [void]
-    def tick
-      servers.delete_if(&:stopped?)
-      stop if servers.empty?
-      servers.each(&:tick)
+    # @param server [Server::Base]
+    def update server
+      if server.stopped?
+        servers.delete server
+        stop if servers.empty?
+      else
+        mutex.synchronize { server.tick }
+      end
     end
 
     private
+
+    def mutex
+      @mutex ||= Mutex.new
+    end
 
     # Start the thread that updates servers via the #tick method.
     #
     # @return [void]
     def run_server_thread
       servers.map(&:start)
-      until stopped?
-        tick
-        sleep 0.001
-      end
+      sleep 0.1 until stopped?
     end
   end
 end

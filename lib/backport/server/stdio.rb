@@ -11,6 +11,11 @@ module Backport
         @out.binmode
         @adapter = adapter
         clients.push Client.new(input, output, adapter)
+        clients.last.add_observer self
+      end
+
+      def update client
+        client.tick
       end
     end
   end

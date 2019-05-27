@@ -38,7 +38,7 @@ module Backport
         result = nil
         mutex.synchronize do
           begin
-            conn = socket.accept_nonblock
+            conn = socket.accept #_nonblock
             addr = conn.addr(true)
             data = {
               family: addr[0],
@@ -47,6 +47,13 @@ module Backport
               address: addr[3]
             }
             clients.push Client.new(conn, conn, @adapter, data)
+            this = self
+            clients.last.adapter.on_close do
+              conn.close
+              changed
+              notify_observers this
+            end
+            clients.last.add_observer self
             clients.last.run
             result = clients.last
           rescue IO::WaitReadable, Errno::EAGAIN
@@ -60,6 +67,14 @@ module Backport
           end
         end
         result
+      end
+
+      def update client
+        if client.stopped?
+          clients.delete client
+        else
+          client.tick
+        end
       end
 
       private

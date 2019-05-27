@@ -6,7 +6,7 @@ RSpec.describe Backport::Server::Stdio do
     server = Backport::Server::Stdio.new(input: input, adapter: InputAdapter)
     server.start
     sleep 0.1
-    server.tick
+    # server.tick
     server.stop
     sleep 0.1
     expect(InputAdapter.received).to include('sent')
