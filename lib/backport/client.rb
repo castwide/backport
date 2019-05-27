@@ -59,12 +59,8 @@ module Backport
     #
     # @return [void]
     def tick
-      if adapter.closed?
-        stop
-      else
-        input = read
-        @adapter.receiving input unless input.nil?
-      end
+      input = read
+      @adapter.receiving input unless input.nil?
     end
 
     private
