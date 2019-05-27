@@ -16,3 +16,4 @@ matrix:
     - rvm: 2.4
       os: osx
 before_install: gem install bundler -v 1.17.2
+script: rspec --format documentation
