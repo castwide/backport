@@ -38,7 +38,7 @@ module Backport
         result = nil
         mutex.synchronize do
           begin
-            conn = socket.accept #_nonblock
+            conn = socket.accept
             addr = conn.addr(true)
             data = {
               family: addr[0],
@@ -48,11 +48,11 @@ module Backport
             }
             clients.push Client.new(conn, conn, @adapter, data)
             this = self
-            clients.last.adapter.on_close do
+            clients.last.adapter._data[:on_close] = Proc.new {
               conn.close
               changed
               notify_observers this
-            end
+            }
             clients.last.add_observer self
             clients.last.run
             result = clients.last
