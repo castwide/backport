@@ -23,16 +23,14 @@ RSpec.describe Backport::Server::Tcpip do
     expect(server.send(:socket)).to be_closed
   end
 
-  it "closes connections" do
+  it "closes connections when remote clients disconnect" do
     server = Backport::Server::Tcpip.new(host: '127.0.0.1', port: 9999)
     server.start
     client = TCPSocket.new('127.0.0.1', 9999)
     sleep 0.1
-    server.tick
     expect(server.clients.length).to eq(1)
     client.close
     sleep 0.1
-    server.tick
     expect(server.clients.length).to eq(0)
     server.stop
   end

@@ -12,7 +12,9 @@ RSpec.describe Backport::Server::Interval do
   end
 
   it 'stops itself' do
-    server = Backport::Server::Interval.new(0.01, &:stop)
+    server = Backport::Server::Interval.new 0.01 do |srvr|
+      srvr.stop
+    end
     server.start
     expect(server.started?).to be(true)
     sleep 0.1
