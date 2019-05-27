@@ -1,3 +1,7 @@
+## 1.1.0 - May 27, 2019
+- Interval server uses threads for timing
+- Servers use observer patterns to reduce polling
+
 ## 1.0.0 - February 19, 2019
 - Renamed Adapter#sending to Adapter#receiving
 - Travis tests up to Ruby 2.6
