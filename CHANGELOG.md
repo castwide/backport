@@ -1,3 +1,7 @@
+## 1.1.1 - May 28, 2019
+- Interval server synchronizes updates and ready state
+- Spec and CI changes
+
 ## 1.1.0 - May 27, 2019
 - Interval server uses threads for timing
 - Servers use observer patterns to reduce polling
