@@ -6,14 +6,16 @@ rvm:
   - 2.2
   - 2.3
   - 2.4
-  - 2.5.1
-  - 2.5.3
+  - 2.5
+  - 2.5
   - 2.6
-  - jruby-9.1.16.0
-  - jruby-9.2
+  - jruby-head
 matrix:
   include:
-    - rvm: 2.4
+    - rvm: 2.6
       os: osx
+  allow_failures:
+    - rvm: jruby-head
+
 before_install: gem install bundler -v 1.17.2
 script: rspec --format documentation
