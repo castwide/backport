@@ -1,3 +1,6 @@
+## 1.1.2 - August 4, 2019
+- Rescue Errno::ENOTSOCK
+
 ## 1.1.1 - May 28, 2019
 - Interval server synchronizes updates and ready state
 - Spec and CI changes

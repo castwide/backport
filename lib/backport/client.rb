@@ -110,7 +110,7 @@ module Backport
       begin
         @in.flush
         chars = @in.sysread(255)
-      rescue EOFError, IOError, Errno::ECONNRESET
+      rescue EOFError, IOError, Errno::ECONNRESET, Errno::ENOTSOCK
         chars = nil
       end
       if chars.nil?
