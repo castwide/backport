@@ -24,9 +24,9 @@ RSpec.describe Backport::Server::Interval do
 
   it 'repeats' do
     counter = 0
-    Backport.run do
+    Backport.run do |machine|
       Backport.prepare_interval 0.1 do
-        Backport.stop if counter == 4
+        machine.stop if counter == 4
         counter += 1
       end
     end

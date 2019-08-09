@@ -10,12 +10,13 @@ module Backport
     # maching starts its main loop. The main loop blocks program execution
     # until the machine is stopped.
     #
+    # @yieldparam [self]
     # @return [void]
     def run
       return unless stopped?
       servers.clear
       @stopped = false
-      yield if block_given?
+      yield self if block_given?
       run_server_thread
     end
 
