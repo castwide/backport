@@ -15,7 +15,7 @@ module Backport
     # @param adapter [Adapter]
     # @return [void]
     def prepare_stdio_server adapter: Adapter
-      machine.prepare Backport::Server::Stdio.new(adapter: adapter)
+      machines.last.prepare Backport::Server::Stdio.new(adapter: adapter)
     end
 
     # Prepare a TCP server to run in Backport.
@@ -25,7 +25,7 @@ module Backport
     # @param adapter [Adapter]
     # @return [void]
     def prepare_tcp_server host: 'localhost', port: 1117, adapter: Adapter
-      machine.prepare Backport::Server::Tcpip.new(host: host, port: port, adapter: adapter)
+      machines.last.prepare Backport::Server::Tcpip.new(host: host, port: port, adapter: adapter)
     end
 
     # Prepare an interval server to run in Backport.
@@ -33,7 +33,7 @@ module Backport
     # @param period [Float] Seconds between intervals
     # @return [void]
     def prepare_interval period, &block
-      machine.prepare Backport::Server::Interval.new(period, &block)
+      machines.last.prepare Backport::Server::Interval.new(period, &block)
     end
 
     # Run the Backport machine. The provided block will be executed before the
@@ -48,14 +48,18 @@ module Backport
     #
     # @return [void]
     def run &block
+      machine = Machine.new
+      machines.push machine
       machine.run &block
+      machines.delete machine
     end
 
-    # Stop the Backport machine.
+    # Stop all running Backport machines.
     #
+    # @deprecated This might not be a good idea.
     # @return [void]
     def stop
-      machine.stop
+      machines.last.stop
     end
 
     def logger
@@ -64,9 +68,9 @@ module Backport
 
     private
 
-    # @return [Machine]
-    def machine
-      @machine ||= Machine.new
+    # @return [Array<Machine>]
+    def machines
+      @machines ||= []
     end
   end
 end
