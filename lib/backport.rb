@@ -59,7 +59,7 @@ module Backport
     # @deprecated This might not be a good idea.
     # @return [void]
     def stop
-      machines.last.stop
+      machines.each(&:stop)
     end
 
     def logger
