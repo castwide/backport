@@ -56,10 +56,19 @@ module Backport
 
     # Stop all running Backport machines.
     #
-    # @deprecated This might not be a good idea.
+    # For more accurate control, consider stopping the machine
+    # from the self reference in Machine#run, e.g.:
+    #
+    # ```
+    # Backport.run do |machine|
+    #   # ...
+    #   machine.stop
+    # end
+    # ```
+    #
     # @return [void]
     def stop
-      machines.each(&:stop)
+      machines.last.stop unless machines.empty?
     end
 
     def logger

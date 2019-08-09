@@ -1,3 +1,6 @@
+## 1.2.0 - August 10, 2019
+- Improved handling of multiple machines
+
 ## 1.1.2 - August 4, 2019
 - Rescue Errno::ENOTSOCK
 
