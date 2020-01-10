@@ -28,6 +28,7 @@ module Backport
 
       private
 
+      # @return [void]
       def run_ready_thread
         Thread.new do
           until stopped?

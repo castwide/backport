@@ -10,6 +10,7 @@ module Backport
 
       # Start the server.
       #
+      # @return [void]
       def start
         return if started?
         starting
@@ -18,6 +19,7 @@ module Backport
 
       # Stop the server.
       #
+      # @return [void]
       def stop
         return if stopped?
         stopping

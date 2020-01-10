@@ -53,6 +53,7 @@ module Backport
     end
 
     # @param server [Server::Base]
+    # @return [void]
     def update server
       if server.stopped?
         servers.delete server
@@ -64,6 +65,7 @@ module Backport
 
     private
 
+    # @return [Mutex]
     def mutex
       @mutex ||= Mutex.new
     end

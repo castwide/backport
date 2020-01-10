@@ -8,6 +8,10 @@ module Backport
     class Tcpip < Base
       include Connectable
 
+      # @param host [String]
+      # @param port [Integer]
+      # @param adapter [Module, Class]
+      # @param socket_class [Class]
       def initialize host: 'localhost', port: 1117, adapter: Adapter, socket_class: TCPServer
         @socket = socket_class.new(host, port)
         @adapter = adapter
@@ -69,6 +73,8 @@ module Backport
         result
       end
 
+      # @param client [Client]
+      # @return [void]
       def update client
         if client.stopped?
           clients.delete client
@@ -82,6 +88,7 @@ module Backport
       # @return [TCPSocket]
       attr_reader :socket
 
+      # @return [void]
       def start_accept_thread
         Thread.new do
           until stopped?

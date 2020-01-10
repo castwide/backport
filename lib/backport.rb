@@ -71,6 +71,7 @@ module Backport
       machines.last.stop unless machines.empty?
     end
 
+    # @return [Logger]
     def logger
       @logger ||= Logger.new(STDERR, level: Logger::WARN, progname: 'Backport')
     end

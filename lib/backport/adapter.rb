@@ -76,6 +76,7 @@ module Backport
     #   The server is responsible for implementation details like closing the
     #   client's socket.
     #
+    # @return [void]
     def close
       return if closed?
       _data[:closed] = true

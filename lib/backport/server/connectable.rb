@@ -5,10 +5,12 @@ module Backport
     # Connectable servers check clients for incoming data on each tick.
     #
     module Connectable
+      # @return [void]
       def starting
         clients.map(&:run)
       end
 
+      # @return [void]
       def stopping
         clients.map(&:stop)
       end
@@ -20,6 +22,7 @@ module Backport
 
       private
 
+      # @return [Mutex]
       def mutex
         @mutex ||= Mutex.new
       end

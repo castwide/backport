@@ -33,6 +33,7 @@ module Backport
     # callback. The server is responsible for implementation details like
     # closing the client's socket.
     #
+    # @return [void]
     def stop
       return if stopped?
       @adapter.closing
@@ -44,6 +45,7 @@ module Backport
     # Start running the client. This method will start the thread that reads
     # client input from IO.
     #
+    # @return [void]
     def start
       return unless stopped?
       @stopped = false
@@ -77,15 +79,17 @@ module Backport
       return tmp unless tmp.empty?
     end
 
+    # @param mod_cls [Module, Class] The Adapter module or class
+    # @param remote [Hash] Remote client data
     # @return [Adapter]
-    def make_adapter cls_mod, remote
-      if cls_mod.is_a?(Class) && cls_mod <= Backport::Adapter
-        @adapter = cls_mod.new(@out, remote)
-      elsif cls_mod.class == Module
+    def make_adapter mod_cls, remote
+      if mod_cls.is_a?(Class) && mod_cls <= Backport::Adapter
+        @adapter = mod_cls.new(@out, remote)
+      elsif mod_cls.class == Module
         @adapter = Adapter.new(@out, remote)
-        @adapter.extend cls_mod
+        @adapter.extend mod_cls
       else
-        raise TypeError, "#{cls_mod} is not a valid Backport adapter"
+        raise TypeError, "#{mod_cls} is not a valid Backport adapter"
       end
     end
 
