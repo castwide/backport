@@ -4,6 +4,7 @@ module Backport
   class Machine
     def initialize
       @stopped = true
+      @mutex = Mutex.new
     end
 
     # Run the machine. If a block is provided, it gets executed before the
@@ -66,9 +67,7 @@ module Backport
     private
 
     # @return [Mutex]
-    def mutex
-      @mutex ||= Mutex.new
-    end
+    attr_reader :mutex
 
     # Start the thread that updates servers via the #tick method.
     #
