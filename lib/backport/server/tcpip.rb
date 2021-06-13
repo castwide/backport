@@ -62,11 +62,11 @@ module Backport
             result = clients.last
           rescue IO::WaitReadable, Errno::EAGAIN
             # ignore
-          rescue Errno::ENOTSOCK, IOError => err
-            Backport.logger.info "Server stopped with minor exception [#{err.class}] #{err.message}"
+          rescue Errno::ENOTSOCK, IOError => e
+            Backport.logger.info "Server stopped with minor exception [#{e.class}] #{e.message}"
             stop
-          rescue Exception => err
-            Backport.logger.warn "Server stopped with major exception [#{err.class}] #{err.message}"
+          rescue StandardError => e
+            Backport.logger.warn "Server stopped with major exception [#{e.class}] #{e.message}"
             stop
           end
         end

@@ -1,5 +1,6 @@
-## 1.2.0 - August 10, 2019
+## 1.2.0 - June 13, 2021
 - Improved handling of multiple machines
+- Rescue StandardError instead of Exception
 
 ## 1.1.2 - August 4, 2019
 - Rescue Errno::ENOTSOCK
