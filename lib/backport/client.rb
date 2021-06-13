@@ -16,6 +16,7 @@ module Backport
     def initialize input, output, adapter, remote = {}
       @in = input
       @out = output
+      @mutex = Mutex.new
       @adapter = make_adapter(adapter, remote)
       @stopped = true
       @buffer = ''
@@ -94,9 +95,7 @@ module Backport
     end
 
     # @return [Mutex]
-    def mutex
-      @mutex ||= Mutex.new
-    end
+    attr_reader :mutex
 
     # Start the thread that checks the input IO for client data.
     #
