@@ -12,12 +12,7 @@ Gem::Specification.new do |spec|
   spec.summary       = %q{A pure Ruby library for event-driven IO}
   spec.homepage      = "http://github.com/castwide/backport"
   spec.license       = "MIT"
-
-  # Specify which files should be added to the gem when it is released.
-  # The `git ls-files -z` loads the files in the RubyGem that have been added into git.
-  spec.files         = Dir.chdir(File.expand_path('..', __FILE__)) do
-    `git ls-files -z`.split("\x0").reject { |f| f.match(%r{^(test|spec|features)/}) }
-  end
+  spec.files         = Dir['CHANGELOG.md', 'LICENSE.txt', 'README.md', 'lib/**/*.rb']
   spec.require_paths = ["lib"]
 
   spec.required_ruby_version = '>= 2.1'
