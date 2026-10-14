@@ -12,7 +12,7 @@ module Backport
   class << self
     # Prepare a STDIO server to run in Backport.
     #
-    # @param adapter [Adapter]
+    # @param adapter [Module, Class]
     # @return [void]
     def prepare_stdio_server adapter: Adapter
       machines.last.prepare Backport::Server::Stdio.new(adapter: adapter)
@@ -22,7 +22,7 @@ module Backport
     #
     # @param host [String]
     # @param port [Integer]
-    # @param adapter [Adapter]
+    # @param adapter [Module, Class]
     # @return [void]
     def prepare_tcp_server host: 'localhost', port: 1117, adapter: Adapter
       machines.last.prepare Backport::Server::Tcpip.new(host: host, port: port, adapter: adapter)
