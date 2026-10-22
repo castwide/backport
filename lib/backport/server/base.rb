@@ -13,8 +13,8 @@ module Backport
       # @return [void]
       def start
         return if started?
-        starting
         @started = true
+        starting
       end
 
       # Stop the server.
